@@ -11,7 +11,10 @@ export default {
         winningFrequency: 0,
         n_won : 0,
         btn0_enabled : false,
-        btn1_enabled : false
+        btn1_enabled : false,
+        sessionid : room.sessionId,
+        roomid: room.id
+        
     }    
     },
     created() {
@@ -47,6 +50,7 @@ export default {
     <main>
         <div id="charlie">
             <h1 class="title">Welcome to the Bell Game</h1>
+            <p>Session: {{ sessionid }} - Room: {{ roomid }} </p>
             <h1 class="section">Charlie</h1>
             <h1 class="charlie" v-show="input!='?'" >Charlie says {{ input }}</h1>
             <div class="btn_grid">
