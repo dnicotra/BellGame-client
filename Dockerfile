@@ -20,4 +20,5 @@ COPY . .
 RUN npm run build
 
 EXPOSE 8080
+RUN mv einstein.html dist/
 CMD [ "http-server", "dist" ]
