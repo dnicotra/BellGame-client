@@ -77,24 +77,26 @@ export default {
         <div id="charlie">
             <h1 class="title">Welcome to the Bell Game</h1>
             <p>Session: {{ sessionid }} - Room: {{ roomid }} </p>
-            <h1 class="section">Charlie says</h1>
+            <h1 class="section" v-show="input!='?'">Charlie says</h1>
             <h1 class="charlie" v-show="input!='?'" >{{ input }}</h1>
             <h1 class="roleAlice" v-if="role == 'Alice'">Alice answers</h1>
             <h1 class="roleBob" v-if="role == 'Bob'">Bob answers</h1>
-            <div class="btn_grid">
+            <div class="btn_grid" v-show="input!='?'">
                 <button class="btn" :disabled="!btn0_enabled" @click="answer0">0</button>
                 <button class="btn" :disabled="!btn1_enabled" @click="answer1">1</button>
             </div>
             
+            <div class="stats">
             <p v-if="outcomes.length > 0"> Winning frequency: {{ (100 * winningFrequency).toFixed(2) }} <span>&#177;</span> {{ (100*3*Math.sqrt((1-winningFrequency)*winningFrequency/outcomes.length)).toFixed(2) }} %</p>
             <p class="n_won" v-if="outcomes.length > 0"> You won {{ n_won }} times</p>
             <p class="n_lost" v-if="outcomes.length > 0"> You lost {{ outcomes.length - n_won }} times</p>
-           
+           </div>
         </div>
         <div id="qubit">
-            <h1 class="section">Entangled Qubit</h1>
-            <p>Choose your measurement basis</p>
-            <div class="meas_btn_grid">
+            <h1 class="roleBob" v-if="role == 'Bob'">Bob's qubit</h1>
+            <h1 class="roleAlice" v-if="role == 'Alice'">Alice's qubit</h1>
+            <p v-if="role != ''">Choose your measurement basis</p>
+            <div v-if="role != ''" class="meas_btn_grid">
                 <button  class="btnA"  @click="measA0">A0</button>
                 <button  class="btnA"  @click="measA1">A1</button>
                 <button  class="btnB"  @click="measB0">B0</button>
@@ -108,12 +110,16 @@ export default {
 </template>
 
 <style>
-
+main{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+ 
+}
 #charlie{
     padding-bottom: 5rem;
 }
 .charlie{
     font-size: xxx-large;
+    font-weight: bold;
     text-align: center;
 }
 
@@ -121,7 +127,6 @@ export default {
 
     font-weight: bold;
     font-size:x-large;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 
     color: rgb(218, 218, 218);
 }
@@ -129,7 +134,6 @@ export default {
     color: orange;
     font-weight: bold;
     font-size:xx-large;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .n_won{
     color: green;
@@ -176,5 +180,8 @@ export default {
 .roleBob{
     color: coral;
     font-weight: bold;
+}
+.stats{
+    font-size: large;
 }
 </style>
