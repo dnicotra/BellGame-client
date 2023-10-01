@@ -1,6 +1,5 @@
 <script lang="ts">
 import Game from './components/Game.vue';
-import Game_einstein from './components/Game_einstein.vue';
 
 
 export default {
@@ -14,14 +13,14 @@ export default {
         return new URLSearchParams(window.location.search).has('einstein')
       }
     },
-    components: { Game, Game_einstein }
+    components: { Game }
 }
 </script>
 
 <template>
   <main>
-    <Game v-if="!einstein()"></Game>
-    <Game_einstein v-if="einstein()"></Game_einstein>
+    <Game einstein_room="bell_game_room" v-if="!einstein()"></Game>
+    <Game einstein_room="bell_game_room_einstein" v-if="einstein()"></Game>
   </main>
 </template>
 
