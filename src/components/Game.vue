@@ -14,7 +14,8 @@ export default {
         btn1_enabled : false,
         sessionid : room.sessionId,
         roomid: room.id,
-        measurement: ""
+        measurement: "",
+        role: ""
         
     }    
     },
@@ -24,6 +25,12 @@ export default {
             this.btn0_enabled = true
             this.btn1_enabled = true 
             this.measurement = ""
+             
+        }
+        )
+
+        room.onMessage("role", (message)=>{
+            this.role = (message==0) ? "Alice" : "Bob"
              
         }
         )
@@ -72,9 +79,11 @@ export default {
             <p>Session: {{ sessionid }} - Room: {{ roomid }} </p>
             <h1 class="section">Charlie says</h1>
             <h1 class="charlie" v-show="input!='?'" >{{ input }}</h1>
+            <h1 class="roleAlice" v-if="role == 'Alice'">Alice answers</h1>
+            <h1 class="roleBob" v-if="role == 'Bob'">Bob answers</h1>
             <div class="btn_grid">
-                <button class="btn" :disabled="!btn0_enabled" @click="answer0">Answer 0</button>
-                <button class="btn" :disabled="!btn1_enabled" @click="answer1">Answer 1</button>
+                <button class="btn" :disabled="!btn0_enabled" @click="answer0">0</button>
+                <button class="btn" :disabled="!btn1_enabled" @click="answer1">1</button>
             </div>
             
             <p v-if="outcomes.length > 0"> Winning frequency: {{ (100 * winningFrequency).toFixed(2) }} <span>&#177;</span> {{ (100*3*Math.sqrt((1-winningFrequency)*winningFrequency/outcomes.length)).toFixed(2) }} %</p>
@@ -101,7 +110,7 @@ export default {
 <style>
 
 #charlie{
-    padding-bottom: 10rem;
+    padding-bottom: 5rem;
 }
 .charlie{
     font-size: xxx-large;
@@ -143,7 +152,7 @@ export default {
 }
 
 .btn{
-    font-size: xx-large;
+    font-size: xxx-large;
     font-weight: bold;
 }
 
@@ -157,5 +166,15 @@ export default {
     font-size: xx-large;
     font-weight: bold;
     color:coral;
+}
+
+.roleAlice{
+    color: skyblue;
+    font-weight: bold;
+}
+
+.roleBob{
+    color: coral;
+    font-weight: bold;
 }
 </style>
