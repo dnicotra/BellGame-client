@@ -1,7 +1,7 @@
 <script lang="ts">
 import * as Colyseus from "colyseus.js"
 const client = new Colyseus.Client("wss://bell-game-server.app.cern.ch")
-let room = await client.joinOrCreate("bell_game_room_einstein")
+
 
 export default {
     data() {
@@ -12,15 +12,20 @@ export default {
         n_won : 0,
         btn0_enabled : false,
         btn1_enabled : false,
-        sessionid : room.sessionId,
-        roomid: room.id,
+        sessionid : "",
+        roomid: "",
         measurement: "",
-        role: ""
+        role: "",
+        room: Colyseus.Room.prototype
         
     }    
     },
     async created() {
-        room.onMessage("input", (message)=>{
+        this.room = await client.joinOrCreate("bell_game_room_einstein")
+        this.sessionid = this.room.sessionId
+        this.roomid = this.room.id
+        
+        this.room.onMessage("input", (message)=>{
             this.input = Boolean(message) ? "1" : "0" 
             this.btn0_enabled = true
             this.btn1_enabled = true 
@@ -29,12 +34,12 @@ export default {
         }
         )
 
-        room.onMessage("role", (message)=>{
+        this.room.onMessage("role", (message)=>{
             this.role = (message==0) ? "Alice" : "Bob"
              
         }
         )
-        room.onMessage("outcome", (message=>{
+        this.room.onMessage("outcome", (message=>{
             this.outcomes.push(message)
             if(Boolean(message)){
                 this.n_won++
@@ -42,31 +47,31 @@ export default {
             this.winningFrequency = this.n_won/this.outcomes.length
         }))
 
-        room.onMessage("measurement",(message) => {
+        this.room.onMessage("measurement",(message) => {
             this.measurement = String(message)
         })
     },
 
     methods: {
         answer0(){
-            room.send("answer", false)
+            this.room.send("answer", false)
             this.btn1_enabled = false
         },
         answer1(){
-            room.send("answer", true)
+            this.room.send("answer", true)
             this.btn0_enabled = false
         },
         measA0(){
-            room.send("measureA0", "")
+            this.room.send("measureA0", "")
         },
         measA1(){
-            room.send("measureA1", "")
+            this.room.send("measureA1", "")
         },
         measB0(){
-            room.send("measureB0", "")
+            this.room.send("measureB0", "")
         },
         measB1(){
-            room.send("measureB1", "")
+            this.room.send("measureB1", "")
         },
     }
 }
